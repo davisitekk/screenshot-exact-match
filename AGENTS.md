@@ -28,3 +28,12 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Business rules (stock, orders, receivables/payables, transfers, dashboard math) live in Postgres SECURITY DEFINER functions called via `supabase.rpc`; the UI never writes stock_qty, order status or financial transactions directly — keeps every effect atomic and audited.
+- `products.stock_qty` changes only through `_apply_stock` (guard trigger resets direct writes); every change writes a `stock_movements` row.
+- Order/receivable/payable state columns are protected by column-level grants; only notes-like columns are directly updatable.
+- Roles live in `user_roles` (admin, financeiro, vendas); RLS uses `has_role`/`has_any_role`/`is_staff`, which also require `profiles.active`.
+- All dates are shown in America/Sao_Paulo via `src/lib/format.ts`; never format dates ad hoc.
+- Product images are in the private `product-images` bucket; `products.image_url` stores the storage path and the UI uses signed URLs.
+- Routes: public `/auth`, `/reset-password`; everything else under `src/routes/_authenticated/` (client-only gate, app shell with sidebar).
