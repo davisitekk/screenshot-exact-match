@@ -42,7 +42,7 @@ export function isoInTZ(d: Date): string {
 }
 
 export function addDaysISO(iso: string, days: number): string {
-  const [y, m, d] = iso.split("-").map(Number);
+  const [y, m, d] = iso.split("-").map(Number) as [number, number, number];
   const dt = new Date(Date.UTC(y, m - 1, d + days));
   return dt.toISOString().slice(0, 10);
 }
@@ -52,7 +52,7 @@ export function startOfMonthISO(iso: string) {
 }
 
 export function endOfMonthISO(iso: string) {
-  const [y, m] = iso.split("-").map(Number);
+  const [y, m] = iso.split("-").map(Number) as [number, number];
   return new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);
 }
 

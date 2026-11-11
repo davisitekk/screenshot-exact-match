@@ -92,7 +92,7 @@ export function groupSeries<T extends { d: string }>(rows: T[], by: "dia" | "sem
     for (const key of keys) cur[key as string] = r2(n(cur[key as string]) + n(row[key]));
     out.set(k, cur);
   }
-  return [...out.values()].sort((a, b) => String(a.d).localeCompare(String(b.d)));
+  return [...out.values()].sort((a, b) => String(a["d"]).localeCompare(String(b["d"])));
 }
 
 export function bucketLabel(k: string, by: "dia" | "semana" | "mes" | "ano") {

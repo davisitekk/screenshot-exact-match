@@ -96,7 +96,7 @@ export function SearchInput({ value, onChange, placeholder = "Pesquisar..." }: {
   );
 }
 
-export function Field({ label, children, hint, className, required }: { label: string; children: ReactNode; hint?: string; className?: string; required?: boolean }) {
+export function Field({ label, children, hint, className, required }: { label: string; children: ReactNode; hint?: string | undefined; className?: string | undefined; required?: boolean | undefined }) {
   return (
     <div className={cn("space-y-1.5", className)}>
       <Label className="text-xs font-medium text-muted-foreground">

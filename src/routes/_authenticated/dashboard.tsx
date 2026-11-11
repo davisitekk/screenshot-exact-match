@@ -47,12 +47,12 @@ function Dashboard() {
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_alerts");
       if (error) throw error;
-      return data as Record<string, Array<Record<string, string | number>>>;
+      return data as unknown as Record<string, AlertRow[]>;
     },
   });
 
   const p = data ? computeProfit(data) : null;
-  const series = data ? groupSeries(data.daily, group, ["total", "profit", "orders"]).map((r) => ({ ...r, label: bucketLabel(String(r.d), group) })) : [];
+  const series = data ? groupSeries(data.daily, group, ["total", "profit", "orders"]).map((r) => ({ ...r, label: bucketLabel(String(r["d"]), group) })) : [];
 
   return (
     <>
@@ -207,8 +207,13 @@ function Dashboard() {
   );
 }
 
-function AlertsPanel({ alerts }: { alerts: Record<string, Array<Record<string, string | number>>> }) {
-  const sections: { key: string; title: string; render: (r: Record<string, string | number>) => React.ReactNode; to: string }[] = [
+interface AlertRow {
+  id?: string; name?: string; stock_qty?: number; min_stock?: number; number?: number; total?: number;
+  created_at?: string; status?: string; updated_at?: string; description?: string; amount?: number; due_date?: string; customer?: string | null;
+}
+
+function AlertsPanel({ alerts }: { alerts: Record<string, AlertRow[]> }) {
+  const sections: { key: string; title: string; render: (r: AlertRow) => React.ReactNode; to: string }[] = [
     { key: "out_of_stock", title: "Produtos sem estoque", render: (r) => r.name, to: "/produtos" },
     { key: "low_stock", title: "Estoque baixo", render: (r) => `${r.name} — ${r.stock_qty} un. (mín. ${r.min_stock})`, to: "/produtos" },
     { key: "awaiting_payment", title: "Pedidos aguardando pagamento", render: (r) => `#${r.number} — ${money(r.total)} — ${date(String(r.created_at))}`, to: "/pedidos" },
@@ -233,8 +238,8 @@ function AlertsPanel({ alerts }: { alerts: Record<string, Array<Record<string, s
                 <Link to={s.to} className="text-xs text-primary hover:underline">Ver</Link>
               </div>
               <ul className="space-y-1 text-xs text-muted-foreground">
-                {alerts[s.key].slice(0, 5).map((r, i) => <li key={i} className="truncate">{s.render(r)}</li>)}
-                {alerts[s.key].length > 5 && <li>+ {alerts[s.key].length - 5} outros</li>}
+                {(alerts[s.key] ?? []).slice(0, 5).map((r, i) => <li key={i} className="truncate">{s.render(r)}</li>)}
+                {(alerts[s.key]?.length ?? 0) > 5 && <li>+ {(alerts[s.key]?.length ?? 0) - 5} outros</li>}
               </ul>
             </div>
           ))}
