@@ -57,8 +57,8 @@ export function ProductDialog({ product, categories, onClose }: { product: Produ
     const fl = e.target.files?.[0];
     e.target.value = "";
     if (!fl) return;
-    if (!IMAGE_TYPES.includes(fl.type)) return toast.error("Use uma foto JPG, PNG ou WEBP.");
-    if (fl.size > MAX_IMAGE_BYTES) return toast.error("A foto deve ter no máximo 5 MB.");
+    if (!IMAGE_TYPES.includes(fl.type)) { toast.error("Use uma foto JPG, PNG ou WEBP."); return; }
+    if (fl.size > MAX_IMAGE_BYTES) { toast.error("A foto deve ter no máximo 5 MB."); return; }
     setFile(fl);
     setRemoveImage(false);
   }
@@ -66,15 +66,15 @@ export function ProductDialog({ product, categories, onClose }: { product: Produ
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const name = f.name.trim();
-    if (!name) return toast.error("Informe o nome do produto.");
+    if (!name) { toast.error("Informe o nome do produto."); return; }
     const nums: Record<string, number | null> = {};
     for (const [k, label] of [["cost", "Custo"], ["price", "Preço de venda"], ["weight_kg", "Peso"], ["height_cm", "Altura"], ["width_cm", "Largura"], ["length_cm", "Comprimento"]] as const) {
       const raw = f[k].trim();
       const v = parseDecimal(raw);
-      if (raw && (v === null || v < 0)) return toast.error(`${label}: informe um número válido, sem valores negativos.`);
+      if (raw && (v === null || v < 0)) { toast.error(`${label}: informe um número válido, sem valores negativos.`); return; }
       nums[k] = v;
     }
-    if (!/^\d+$/.test(f.min_stock.trim())) return toast.error("Estoque mínimo: informe um número inteiro.");
+    if (!/^\d+$/.test(f.min_stock.trim())) { toast.error("Estoque mínimo: informe um número inteiro."); return; }
 
     setBusy(true);
     let uploaded: string | null = null;
@@ -82,7 +82,7 @@ export function ProductDialog({ product, categories, onClose }: { product: Produ
       const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
       uploaded = `produtos/${crypto.randomUUID()}.${ext}`;
       const { error } = await supabase.storage.from(PRODUCT_IMAGES_BUCKET).upload(uploaded, file, { contentType: file.type });
-      if (error) { setBusy(false); return toast.error(`Não foi possível enviar a foto. ${errorMessage(error)}`); }
+      if (error) { setBusy(false); { toast.error(`Não foi possível enviar a foto. ${errorMessage(error)}`); return; } }
     }
     const image_url = uploaded ?? (removeImage ? null : product?.image_url ?? null);
     const c = nums["cost"] ?? 0;
@@ -114,7 +114,7 @@ export function ProductDialog({ product, categories, onClose }: { product: Produ
     if (error) {
       if (uploaded) await supabase.storage.from(PRODUCT_IMAGES_BUCKET).remove([uploaded]);
       setBusy(false);
-      return toast.error(errorMessage(error));
+      { toast.error(errorMessage(error)); return; }
     }
     if (product?.image_url && product.image_url !== image_url) {
       await supabase.storage.from(PRODUCT_IMAGES_BUCKET).remove([product.image_url]);

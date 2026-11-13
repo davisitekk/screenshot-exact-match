@@ -25,11 +25,11 @@ export function StockDialog({ product, onClose }: { product: Product; onClose: (
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (q === null || (!isAdjust && q === 0)) return toast.error(isAdjust ? "Informe a quantidade contada." : "Informe uma quantidade maior que zero.");
+    if (q === null || (!isAdjust && q === 0)) { toast.error(isAdjust ? "Informe a quantidade contada." : "Informe uma quantidade maior que zero."); return; }
     setBusy(true);
     const { data, error } = await supabase.rpc("register_stock_movement", { p_product: product.id, p_type: type, p_quantity: q, p_reason: reason });
     setBusy(false);
-    if (error) return toast.error(errorMessage(error));
+    if (error) { toast.error(errorMessage(error)); return; }
     toast.success(`Estoque de ${product.name}: ${number(data)} un.`);
     await Promise.all([
       qc.invalidateQueries({ queryKey: productsQuery.queryKey }),

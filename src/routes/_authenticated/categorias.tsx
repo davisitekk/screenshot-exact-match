@@ -59,16 +59,16 @@ function CategoriesPage() {
 
   async function toggle(c: Category) {
     const { error } = await supabase.from("product_categories").update({ active: !c.active }).eq("id", c.id);
-    if (error) return toast.error(errorMessage(error));
+    if (error) { toast.error(errorMessage(error)); return; }
     toast.success(c.active ? "Categoria inativada" : "Categoria ativada");
     await refresh();
   }
 
   async function remove(c: Category) {
     const blocker = categoryDeleteBlocker(categories, products, c.id);
-    if (blocker) return void toast.error(blocker);
+    if (blocker) { toast.error(blocker); return; }
     const { error } = await supabase.from("product_categories").delete().eq("id", c.id);
-    if (error) return void toast.error(errorMessage(error));
+    if (error) { toast.error(errorMessage(error)); return; }
     toast.success("Categoria excluída");
     await refresh();
   }
@@ -164,17 +164,17 @@ function CategoryDialog({ editing, categories, onClose, onSaved }: {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const n = name.trim();
-    if (!n) return toast.error("Informe o nome da categoria.");
+    if (!n) { toast.error("Informe o nome da categoria."); return; }
     const pid = parentId || null;
     const dup = categories.some((x) => x.id !== c?.id && (x.parent_id ?? null) === pid && x.name.trim().toLocaleLowerCase("pt-BR") === n.toLocaleLowerCase("pt-BR"));
-    if (dup) return toast.error(pid ? "Já existe uma subcategoria com este nome nesta categoria." : "Já existe uma categoria principal com este nome.");
+    if (dup) { toast.error(pid ? "Já existe uma subcategoria com este nome nesta categoria." : "Já existe uma categoria principal com este nome."); return; }
     setBusy(true);
     const payload = { name: n, parent_id: pid, description: description.trim() || null, active };
     const { error } = c
       ? await supabase.from("product_categories").update(payload).eq("id", c.id)
       : await supabase.from("product_categories").insert(payload);
     setBusy(false);
-    if (error) return toast.error(errorMessage(error));
+    if (error) { toast.error(errorMessage(error)); return; }
     toast.success(c ? "Categoria atualizada" : "Categoria criada");
     await onSaved();
     onClose();

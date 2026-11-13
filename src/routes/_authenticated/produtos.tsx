@@ -98,7 +98,7 @@ function ProductsPage() {
 
   async function toggle(p: Product) {
     const { error } = await supabase.from("products").update({ active: !p.active }).eq("id", p.id);
-    if (error) return toast.error(errorMessage(error));
+    if (error) { toast.error(errorMessage(error)); return; }
     toast.success(p.active ? "Produto inativado" : "Produto ativado");
     await refresh();
   }
@@ -107,7 +107,7 @@ function ProductsPage() {
     const { error } = await supabase.from("products").delete().eq("id", p.id);
     if (error) {
       const m = errorMessage(error);
-      return toast.error(m.includes("vinculado") ? "Este produto já tem vendas ou movimentações de estoque e não pode ser excluído. Inative-o." : m);
+      { toast.error(m.includes("vinculado") ? "Este produto já tem vendas ou movimentações de estoque e não pode ser excluído. Inative-o." : m); return; }
     }
     if (p.image_url) await supabase.storage.from(PRODUCT_IMAGES_BUCKET).remove([p.image_url]);
     toast.success("Produto excluído");
