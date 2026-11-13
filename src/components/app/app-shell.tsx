@@ -3,7 +3,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   LayoutDashboard, ShoppingBag, Users, Package, Boxes, Truck, ArrowDownCircle, ArrowUpCircle,
-  LineChart, Wallet, UserCog, History, Settings, LogOut, Menu, Store,
+  LineChart, Wallet, UserCog, History, Settings, LogOut, Menu, FolderTree,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
     group: "Catálogo",
     items: [
       { to: "/produtos", label: "Produtos", icon: Package },
+      { to: "/categorias", label: "Categorias", icon: FolderTree },
       { to: "/estoque", label: "Estoque", icon: Boxes },
       { to: "/fornecedores", label: "Fornecedores", icon: Truck },
     ],
@@ -50,6 +51,18 @@ const NAV: { group: string; items: NavItem[] }[] = [
   },
 ];
 
+/** Store wordmark in the store's display lettering: last word in gold. */
+export function BrandMark({ name, className }: { name?: string | null | undefined; className?: string }) {
+  const words = (name?.trim() || "Minha Loja").split(/\s+/);
+  const last = words.length > 1 ? words.pop() : undefined;
+  return (
+    <p className={cn("truncate font-display text-2xl leading-none text-sidebar-foreground", className)}>
+      {words.join(" ")}
+      {last && <span className="text-sidebar-primary"> {last}</span>}
+    </p>
+  );
+}
+
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const { me, has } = useMe();
   const { data: settings } = useQuery(settingsQuery);
@@ -66,12 +79,9 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
-      <div className="flex items-center gap-3 px-5 pb-4 pt-5">
-        <span className="grid size-9 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"><Store className="size-5" /></span>
-        <div className="min-w-0">
-          <p className="truncate font-display text-sm font-semibold">{settings?.store_name ?? "Minha Loja"}</p>
-          <p className="text-[11px] text-sidebar-muted">Gestão da loja</p>
-        </div>
+      <div className="border-b border-sidebar-border px-5 pb-4 pt-5">
+        <BrandMark name={settings?.store_name} />
+        <p className="eyebrow mt-1 text-sidebar-muted">Gestão da loja</p>
       </div>
       <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-2">
         {NAV.map((g) => {
@@ -79,7 +89,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           if (!items.length) return null;
           return (
             <div key={g.group}>
-              <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-muted">{g.group}</p>
+              <p className="eyebrow px-2 pb-1.5 text-sidebar-muted">{g.group}</p>
               <ul className="space-y-0.5">
                 {items.map((i) => {
                   const active = pathname === i.to || pathname.startsWith(i.to + "/");
@@ -89,9 +99,9 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                         to={i.to}
                         onClick={onNavigate}
                         className={cn(
-                          "flex items-center gap-3 rounded-md px-2.5 py-2 text-sm transition-colors",
+                          "relative flex items-center gap-3 rounded-sm px-2.5 py-2 text-sm transition-colors",
                           active
-                            ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
+                            ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:bg-sidebar-primary"
                             : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
                         )}
                       >
@@ -131,7 +141,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" onClick={() => setOpen(true)} aria-label="Abrir menu">
           <Menu />
         </Button>
-        <span className="font-display text-sm font-semibold">{settings?.store_name ?? "Minha Loja"}</span>
+        <BrandMark name={settings?.store_name} />
       </header>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-72 border-sidebar-border p-0">

@@ -479,21 +479,38 @@ export type Database = {
       }
       product_categories: {
         Row: {
+          active: boolean
           created_at: string
+          description: string | null
           id: string
           name: string
+          parent_id: string | null
         }
         Insert: {
+          active?: boolean
           created_at?: string
+          description?: string | null
           id?: string
           name: string
+          parent_id?: string | null
         }
         Update: {
+          active?: boolean
           created_at?: string
+          description?: string | null
           id?: string
           name?: string
+          parent_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "product_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_price_history: {
         Row: {

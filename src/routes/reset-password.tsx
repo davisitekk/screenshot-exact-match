@@ -10,9 +10,9 @@ import { errorMessage } from "@/lib/format";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Nova senha — Gestão da Loja" },
+      { title: "Nova senha — Importados Style" },
       { name: "description", content: "Defina uma nova senha de acesso ao sistema de gestão." },
-      { property: "og:title", content: "Nova senha — Gestão da Loja" },
+      { property: "og:title", content: "Nova senha — Importados Style" },
       { property: "og:description", content: "Defina uma nova senha de acesso ao sistema de gestão." },
     ],
   }),
@@ -50,7 +50,7 @@ function ResetPassword() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-5">
       <div className="w-full max-w-sm rounded-xl border bg-card p-6 shadow-card">
-        <h1 className="text-xl font-semibold">Criar nova senha</h1>
+        <h1 className="text-4xl">Criar nova senha</h1>
         {!ready ? (
           <p className="mt-3 text-sm text-muted-foreground">Validando o link de recuperação... Se nada acontecer, solicite um novo link na tela de login.</p>
         ) : (

@@ -18,9 +18,9 @@ import { ORDER_STATUS, ORDER_STATUS_LIST } from "@/lib/constants";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Painel — Gestão da Loja" },
+      { title: "Painel — Importados Style" },
       { name: "description", content: "Indicadores de vendas, lucro, pedidos, estoque e financeiro da loja." },
-      { property: "og:title", content: "Painel — Gestão da Loja" },
+      { property: "og:title", content: "Painel — Importados Style" },
       { property: "og:description", content: "Indicadores de vendas, lucro, pedidos, estoque e financeiro da loja." },
     ],
   }),
@@ -113,8 +113,8 @@ function Dashboard() {
                   ["= Faturamento líquido", p.netRevenue, "font-semibold"],
                   ["(−) Custo dos produtos vendidos", -p.cogs, ""],
                   ["(−) Frete pago pela loja", -p.shippingCosts, ""],
-                  ["= Lucro bruto", p.grossProfit, "font-semibold text-accent-foreground"],
-                  ...(canFinance ? [["(−) Despesas operacionais", -p.opex, ""], ["= Lucro líquido estimado", p.netProfit, "font-semibold text-accent-foreground"]] : []),
+                  ["= Lucro bruto", p.grossProfit, "font-semibold text-success"],
+                  ...(canFinance ? [["(−) Despesas operacionais", -p.opex, ""], ["= Lucro líquido estimado", p.netProfit, "font-semibold text-success"]] : []),
                 ].map(([l, v, cls]) => (
                   <div key={l as string} className={`flex justify-between gap-2 ${cls}`}>
                     <dt className="text-muted-foreground">{l}</dt>

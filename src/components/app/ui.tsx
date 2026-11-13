@@ -10,8 +10,8 @@ export function PageHeader({ title, description, actions }: { title: string; des
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground sm:text-[1.7rem]">{title}</h1>
-        {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+        <h1 className="text-[2rem] leading-none text-foreground sm:text-[2.6rem]">{title}</h1>
+        {description && <p className="mt-2 text-sm text-muted-foreground">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>
@@ -20,11 +20,11 @@ export function PageHeader({ title, description, actions }: { title: string; des
 
 export function Panel({ title, description, actions, children, className }: { title?: string; description?: string; actions?: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <section className={cn("rounded-xl border bg-card shadow-card", className)}>
+    <section className={cn("rounded-lg border bg-card shadow-card", className)}>
       {(title || actions) && (
         <header className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 sm:px-5">
           <div>
-            {title && <h2 className="text-sm font-semibold text-foreground">{title}</h2>}
+            {title && <h2 className="eyebrow text-foreground">{title}</h2>}
             {description && <p className="text-xs text-muted-foreground">{description}</p>}
           </div>
           {actions}
@@ -41,22 +41,22 @@ export function StatCard({ label, value, hint, tone = "default", icon }: { label
     success: "bg-card",
     warning: "bg-card",
     danger: "bg-card",
-    brand: "bg-brand text-primary-foreground border-transparent",
+    brand: "bg-brand text-foreground border-primary/40 shadow-gold",
   }[tone];
   const dot = {
     default: "bg-secondary text-primary",
-    success: "bg-success-soft text-accent-foreground",
+    success: "bg-success-soft text-success",
     warning: "bg-warning-soft text-warning-foreground",
     danger: "bg-danger-soft text-destructive",
-    brand: "bg-sidebar-accent text-sidebar-primary",
+    brand: "bg-gold text-primary-foreground",
   }[tone];
   return (
-    <div className={cn("rounded-xl border p-4 shadow-card", toneCls)}>
+    <div className={cn("rounded-lg border p-4 shadow-card", toneCls)}>
       <div className="flex items-start justify-between gap-2">
-        <p className={cn("text-xs font-medium uppercase tracking-wide", tone === "brand" ? "text-sidebar-muted" : "text-muted-foreground")}>{label}</p>
+        <p className={cn("eyebrow", tone === "brand" ? "text-primary" : "text-muted-foreground")}>{label}</p>
         {icon && <span className={cn("grid size-8 place-items-center rounded-lg [&_svg]:size-4", dot)}>{icon}</span>}
       </div>
-      <p className="mt-2 font-display text-xl font-semibold tabular-nums sm:text-2xl">{value}</p>
+      <p className="mt-2 font-display text-[1.7rem] leading-none tabular-nums sm:text-[2rem]">{value}</p>
       {hint && <p className={cn("mt-1 text-xs", tone === "brand" ? "text-sidebar-muted" : "text-muted-foreground")}>{hint}</p>}
     </div>
   );
@@ -128,7 +128,7 @@ export function NativeSelect(props: React.SelectHTMLAttributes<HTMLSelectElement
 export function Loading() {
   return (
     <div className="flex items-center justify-center py-20">
-      <span className="size-6 animate-spin rounded-full border-2 border-muted border-t-success" />
+      <span className="size-6 animate-spin rounded-full border-2 border-muted border-t-primary" />
     </div>
   );
 }

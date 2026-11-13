@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Store, BarChart3, Boxes, Wallet } from "lucide-react";
+import { BarChart3, Boxes, Wallet } from "lucide-react";
+import lifestyle from "@/assets/importados-style-lifestyle.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/app/ui";
 import { errorMessage } from "@/lib/format";
+import { BrandMark } from "@/components/app/app-shell";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Entrar — Gestão da Loja" },
+      { title: "Entrar — Importados Style" },
       { name: "description", content: "Acesse o sistema de gestão de vendas, estoque e financeiro da loja." },
-      { property: "og:title", content: "Entrar — Gestão da Loja" },
+      { property: "og:title", content: "Entrar — Importados Style" },
       { property: "og:description", content: "Acesse o sistema de gestão de vendas, estoque e financeiro da loja." },
     ],
   }),
@@ -70,40 +72,43 @@ function AuthPage() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
-      <div className="relative hidden overflow-hidden bg-brand p-12 text-primary-foreground lg:flex lg:flex-col lg:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"><Store className="size-5" /></span>
-          <span className="font-display text-lg font-semibold">Gestão da Loja</span>
+      <div className="relative hidden overflow-hidden border-r bg-sidebar lg:flex lg:flex-col lg:justify-between">
+        <img src={lifestyle.url} alt="" aria-hidden className="absolute inset-0 size-full object-cover opacity-35 grayscale" />
+        <div className="absolute inset-0 bg-gradient-to-t from-sidebar via-sidebar/85 to-sidebar/40" />
+        <div className="relative p-12">
+          <BrandMark name="Importados Style" className="text-4xl" />
+          <p className="eyebrow mt-2 text-sidebar-muted">Gestão da loja</p>
         </div>
-        <div className="max-w-md">
-          <h1 className="text-4xl font-semibold leading-tight">Toda a operação da sua loja em um só lugar.</h1>
-          <p className="mt-4 text-sidebar-muted">Pedidos, estoque, clientes e financeiro integrados — com lucro calculado de verdade, descontando custos, taxas e despesas.</p>
-          <ul className="mt-10 space-y-4 text-sm">
+        <div className="relative max-w-lg p-12">
+          <p className="eyebrow text-primary">Painel interno</p>
+          <h1 className="mt-3 text-6xl leading-[0.92] text-sidebar-foreground">Toda a operação da loja em um só lugar.</h1>
+          <p className="mt-5 max-w-md text-sidebar-muted">Pedidos, estoque, clientes e financeiro integrados — com lucro calculado de verdade, descontando custos, taxas e despesas.</p>
+          <ul className="mt-10 space-y-4 text-sm text-sidebar-foreground">
             {[
-              [BarChart3, "Indicadores de vendas e lucro em tempo real"],
-              [Boxes, "Estoque atualizado automaticamente a cada venda"],
+              [BarChart3, "Indicadores de vendas e lucro"],
+              [Boxes, "Estoque atualizado a cada venda"],
               [Wallet, "Contas a pagar, a receber e fluxo de caixa"],
             ].map(([Icon, t], i) => {
-              const I = Icon as typeof Store;
+              const I = Icon as typeof Wallet;
               return (
                 <li key={i} className="flex items-center gap-3">
-                  <span className="grid size-8 place-items-center rounded-md bg-sidebar-accent text-sidebar-primary"><I className="size-4" /></span>
+                  <span className="grid size-8 place-items-center rounded-sm border border-primary/40 text-primary"><I className="size-4" /></span>
                   {t as string}
                 </li>
               );
             })}
           </ul>
+          <p className="mt-12 text-xs text-sidebar-muted">Dados protegidos com controle de acesso por perfil (LGPD).</p>
         </div>
-        <p className="text-xs text-sidebar-muted">Dados protegidos com controle de acesso por perfil (LGPD).</p>
       </div>
 
       <div className="flex items-center justify-center px-5 py-12">
         <div className="w-full max-w-sm">
-          <div className="mb-8 flex items-center gap-3 lg:hidden">
-            <span className="grid size-10 place-items-center rounded-lg bg-primary text-primary-foreground"><Store className="size-5" /></span>
-            <span className="font-display text-lg font-semibold">Gestão da Loja</span>
+          <div className="mb-10 lg:hidden">
+            <BrandMark name="Importados Style" className="text-3xl" />
+            <p className="eyebrow mt-1 text-muted-foreground">Gestão da loja</p>
           </div>
-          <h2 className="text-2xl font-semibold">
+          <h2 className="font-display text-4xl">
             {mode === "login" ? "Entrar" : mode === "signup" ? "Criar acesso" : "Recuperar senha"}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -113,7 +118,7 @@ function AuthPage() {
           </p>
 
           {notice ? (
-            <div className="mt-6 rounded-lg border bg-success-soft p-4 text-sm text-accent-foreground">{notice}</div>
+            <div className="mt-6 rounded-lg border bg-success-soft p-4 text-sm text-success">{notice}</div>
           ) : (
             <form onSubmit={submit} className="mt-6 space-y-4">
               {mode === "signup" && (
