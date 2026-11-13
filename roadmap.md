@@ -1,20 +1,40 @@
-# Roadmap
+# Roadmap — Importados Style
 
-## Etapa 1 (em andamento)
-- [x] Banco de dados, regras de estoque/pedidos/financeiro, permissões por perfil
-- [ ] Login, recuperação de senha, perfis e usuários
-- [ ] Painel com indicadores, gráficos e alertas
-- [ ] Produtos, estoque, pedidos (com impressão/PDF), clientes, fornecedores
-- [ ] Financeiro: contas a receber, a pagar, fluxo de caixa, contas/carteiras, transferências
-- [ ] Configurações da loja e registro de atividades
+> Status revisado a partir da árvore de arquivos e dos módulos atualmente versionados. Um item só deve ser marcado como concluído após validação funcional e testes executados.
 
-## Etapa 2
-- [ ] Compras de mercadorias (entrada no estoque ao receber + conta a pagar automática)
-- [ ] Relatórios gerenciais com exportação PDF e Excel
-- [ ] Variações de produto com estoque próprio; múltiplos locais de estoque
-- [ ] Comparação de preços entre fornecedores
+## Etapa 0 — Segurança e diagnóstico
+- [x] Remover o arquivo `.env` do estado atual do repositório e ignorar arquivos de ambiente no Git.
+- [ ] Rotacionar qualquer credencial que já tenha sido incluída no histórico público do Git.
+- [ ] Validar configuração real do Supabase no Lovable Secrets e separar variáveis públicas de segredos.
+- [ ] Executar auditoria completa de RLS, grants, funções SECURITY DEFINER e fluxos críticos no projeto Supabase conectado.
+- [ ] Executar build, lint e suíte completa de testes no ambiente Lovable/CI.
 
-## Etapa 3
-- [ ] Envio de notificações por e-mail / WhatsApp
-- [ ] Integrações (Mercado Livre, Shopee, Shopify, Mercado Pago, Melhor Envio...) — somente com credenciais reais
-- [ ] Backup/exportação completa dos dados
+## Etapa 1 — ERP interno existente (concluir e validar)
+- [x] Estrutura inicial de banco, regras de estoque/pedidos/financeiro e permissões por perfil versionadas em migrations.
+- [x] Testes unitários existentes para cálculos financeiros, catálogo, CPF/CNPJ e roteamento.
+- [ ] Validar login, cadastro, recuperação de senha e provisionamento seguro do primeiro administrador.
+- [ ] Implementar ou confirmar rotas funcionais para produtos, categorias, estoque, pedidos, clientes, fornecedores, financeiro, usuários, atividades e configurações.
+- [ ] Corrigir links do menu que ainda não tenham uma rota implementada.
+- [ ] Validar dashboard e indicadores contra dados reais e regras contábeis definidas.
+- [ ] Validar operações de pedido, estoque, contas a receber/pagar e reversões com testes de integração.
+- [ ] Confirmar que todos os módulos respeitam os papéis admin, financeiro e vendas no banco, não apenas na interface.
+
+## Etapa 2 — Operação comercial e integridade
+- [ ] Variações de produto com estoque independente por tamanho/cor (não presumir que stock_qty geral atende esse requisito).
+- [ ] Compras de mercadorias com entrada de estoque e contas a pagar atômicas.
+- [ ] Histórico/auditoria completo das mudanças críticas e trilha de reversões.
+- [ ] Relatórios gerenciais com exportação PDF e Excel.
+- [ ] Múltiplos locais de estoque, se forem necessários à operação.
+- [ ] Idempotência e concorrência para operações críticas, com testes de corrida.
+
+## Etapa 3 — Loja virtual e integrações externas (somente se este for o escopo)
+- [ ] Definir se o projeto continuará como ERP interno ou também terá uma loja pública com catálogo, carrinho e checkout.
+- [ ] Se houver checkout público, especificar e implementar fluxo de compra separado das vendas manuais do ERP.
+- [ ] Integrar Mercado Pago somente com credenciais privadas e webhooks autenticados, após testes em sandbox.
+- [ ] Integrar frete (Melhor Envio/Correios) somente com credenciais e contrato/configuração válidos.
+- [ ] E-mails e WhatsApp transacionais com consentimento e credenciais reais.
+- [ ] Políticas comerciais, privacidade, trocas/devoluções e dados legais fornecidos pelo responsável da loja.
+- [ ] Backup, restauração testada, monitoramento e plano de resposta a incidentes.
+
+## Critério de conclusão
+Não marcar como pronto para produção por aparência ou por compilação isolada. Exigir evidência de testes, autorização no banco, configuração de serviços externos, recuperação de backup e revisão de segurança.
