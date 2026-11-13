@@ -16,8 +16,8 @@ dist-ssr
 .nitro
 *.local
 
-# Secrets and local environment
-.env
+# Local environment overrides. The root .env is managed by Lovable Cloud, holds only
+# publishable values, and must stay tracked: hosted builds read VITE_SUPABASE_* from it.
 .env.*
 !.env.example
 

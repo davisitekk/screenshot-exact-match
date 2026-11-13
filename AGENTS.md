@@ -37,3 +37,4 @@ use the editor.
 - All dates are shown in America/Sao_Paulo via `src/lib/format.ts`; never format dates ad hoc.
 - Product images are in the private `product-images` bucket; `products.image_url` stores the storage path and the UI uses signed URLs.
 - Routes: public `/auth`, `/reset-password`; everything else under `src/routes/_authenticated/` (client-only gate, app shell with sidebar).
+- The root `.env` (Lovable Cloud publishable URL/key only) stays tracked in git; hosted builds inline `VITE_SUPABASE_*` from it and the app crashes with "Missing Supabase environment variable(s)" without it.
