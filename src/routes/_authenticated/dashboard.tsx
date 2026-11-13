@@ -14,6 +14,7 @@ import { PeriodPicker, GroupToggle, presetPeriod, type Period } from "@/componen
 import { computeProfit, groupSeries, bucketLabel, type DashboardData } from "@/lib/finance";
 import { money, number, percent, date } from "@/lib/format";
 import { ORDER_STATUS, ORDER_STATUS_LIST } from "@/lib/constants";
+import { isReady } from "@/lib/modules";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -235,7 +236,7 @@ function AlertsPanel({ alerts }: { alerts: Record<string, AlertRow[]> }) {
             <div key={s.key} className="rounded-lg border bg-background p-3">
               <div className="mb-2 flex items-center justify-between gap-2">
                 <p className="flex items-center gap-1.5 text-sm font-semibold"><AlertTriangle className="size-4 text-warning" />{s.title}</p>
-                <Link to={s.to} className="text-xs text-primary hover:underline">Ver</Link>
+                {isReady(s.to) && <Link to={s.to} className="text-xs text-primary hover:underline">Ver</Link>}
               </div>
               <ul className="space-y-1 text-xs text-muted-foreground">
                 {(alerts[s.key] ?? []).slice(0, 5).map((r, i) => <li key={i} className="truncate">{s.render(r)}</li>)}

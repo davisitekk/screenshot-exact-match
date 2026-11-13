@@ -12,6 +12,7 @@ import { useMe } from "@/hooks/use-auth";
 import { settingsQuery } from "@/lib/settings";
 import { ROLES, type AppRole } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { isReady } from "@/lib/modules";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; roles?: AppRole[] };
 const NAV: { group: string; items: NavItem[] }[] = [
@@ -93,6 +94,17 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               <ul className="space-y-0.5">
                 {items.map((i) => {
                   const active = pathname === i.to || pathname.startsWith(i.to + "/");
+                  if (!isReady(i.to)) {
+                    return (
+                      <li key={i.to}>
+                        <span aria-disabled="true" title="Esta tela ainda está em construção" className="flex cursor-not-allowed items-center gap-3 rounded-sm px-2.5 py-2 text-sm text-sidebar-foreground/40">
+                          <i.icon className="size-4" />
+                          <span className="flex-1">{i.label}</span>
+                          <span className="rounded-sm border border-sidebar-border px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-sidebar-muted">Em breve</span>
+                        </span>
+                      </li>
+                    );
+                  }
                   return (
                     <li key={i.to}>
                       <Link

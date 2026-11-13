@@ -3,8 +3,7 @@
 > Status revisado a partir da árvore de arquivos e dos módulos atualmente versionados. Um item só deve ser marcado como concluído após validação funcional e testes executados.
 
 ## Etapa 0 — Segurança e diagnóstico
-- [x] Remover o arquivo `.env` do estado atual do repositório e ignorar arquivos de ambiente no Git.
-- [ ] Rotacionar qualquer credencial que já tenha sido incluída no histórico público do Git.
+- [x] Manter o `.env` versionado: ele contém só o endereço e a chave pública do backend, e o app publicado precisa dele (sem ele a tela fica em branco). Nenhum segredo esteve nesse arquivo, então não há chave a rotacionar.
 - [ ] Validar configuração real do Supabase no Lovable Secrets e separar variáveis públicas de segredos.
 - [ ] Executar auditoria completa de RLS, grants, funções SECURITY DEFINER e fluxos críticos no projeto Supabase conectado.
 - [ ] Executar build, lint e suíte completa de testes no ambiente Lovable/CI.
@@ -13,8 +12,9 @@
 - [x] Estrutura inicial de banco, regras de estoque/pedidos/financeiro e permissões por perfil versionadas em migrations.
 - [x] Testes unitários existentes para cálculos financeiros, catálogo, CPF/CNPJ e roteamento.
 - [ ] Validar login, cadastro, recuperação de senha e provisionamento seguro do primeiro administrador.
-- [ ] Implementar ou confirmar rotas funcionais para produtos, categorias, estoque, pedidos, clientes, fornecedores, financeiro, usuários, atividades e configurações.
-- [ ] Corrigir links do menu que ainda não tenham uma rota implementada.
+- [ ] Telas de Produtos (lista, filtros, cadastro/edição, foto, ativar/inativar, movimentar estoque) e Categorias (árvore, cadastro/edição, ativar/inativar, excluir com bloqueio).
+- [ ] Implementar ou confirmar rotas funcionais para estoque (histórico), pedidos, clientes, fornecedores, financeiro, usuários, atividades e configurações.
+- [ ] Corrigir links do menu que ainda não tenham uma rota implementada (marcar como "Em breve" até existirem).
 - [ ] Validar dashboard e indicadores contra dados reais e regras contábeis definidas.
 - [ ] Validar operações de pedido, estoque, contas a receber/pagar e reversões com testes de integração.
 - [ ] Confirmar que todos os módulos respeitam os papéis admin, financeiro e vendas no banco, não apenas na interface.

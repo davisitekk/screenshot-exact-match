@@ -86,3 +86,52 @@ export function useSignedImages(paths: (string | null | undefined)[]) {
     },
   });
 }
+
+export type StockLevel = "ok" | "baixo" | "sem";
+
+/** Same thresholds as the dashboard: out of stock at 0 or less, low when at or below the minimum. */
+export function stockLevel(p: Pick<Product, "stock_qty" | "min_stock">): StockLevel {
+  if (p.stock_qty <= 0) return "sem";
+  if (p.stock_qty <= p.min_stock) return "baixo";
+  return "ok";
+}
+
+export interface ProductFilters {
+  q?: string | undefined;
+  category?: string | undefined;
+  status?: "ativos" | "inativos" | "todos" | undefined;
+  stock?: "baixo" | "sem" | undefined;
+  uncategorized?: boolean | undefined;
+}
+
+const fold = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+/** Search by name, code, SKU, brand or barcode (accent-insensitive); status defaults to active only. */
+export function filterProducts(products: Product[], categories: Category[], f: ProductFilters): Product[] {
+  const q = fold(f.q?.trim() ?? "");
+  const catIds = f.category ? categoryFilterIds(categories, f.category) : null;
+  const status = f.status ?? "ativos";
+  return products.filter((p) => {
+    if (status === "ativos" && !p.active) return false;
+    if (status === "inativos" && p.active) return false;
+    if (catIds && (!p.category_id || !catIds.has(p.category_id))) return false;
+    if (f.uncategorized && p.category_id) return false;
+    if (f.stock && stockLevel(p) !== f.stock) return false;
+    if (q) {
+      const hay = fold([p.name, p.code, p.sku, p.brand, p.barcode].filter(Boolean).join(" "));
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+/** Why a category cannot be deleted, or null when it can. Deleting would silently uncategorize products. */
+export function categoryDeleteBlocker(categories: Category[], products: Pick<Product, "category_id">[], id: string): string | null {
+  if (categories.some((c) => c.parent_id === id)) return "Esta categoria tem subcategorias. Exclua ou mova as subcategorias primeiro.";
+  const n = products.filter((p) => p.category_id === id).length;
+  if (n > 0) return `Esta categoria tem ${n} produto${n > 1 ? "s" : ""}. Mova os produtos para outra categoria ou inative a categoria.`;
+  return null;
+}
+
+export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+export const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];

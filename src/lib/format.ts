@@ -102,12 +102,33 @@ export function formatDocument(value: string | null | undefined) {
   return value ?? "";
 }
 
+/**
+ * Reads a Brazilian-typed decimal: "1.234,56", "1234,56", "R$ 10" or "12.5".
+ * A dot is a thousands separator when a comma is present or it groups exactly 3 digits ("1.234").
+ * Returns null for empty or invalid input.
+ */
+export function parseDecimal(input: string | null | undefined): number | null {
+  let s = (input ?? "").replace(/R\$/g, "").replace(/\s/g, "");
+  if (!s) return null;
+  if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+  else if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+  if (!/^-?\d+(\.\d+)?$/.test(s)) return null;
+  return Number(s);
+}
+
+/** Number shown inside an editable field: 1234.5 -> "1234,50". */
+export function decimalInput(v: number | string | null | undefined, digits = 2): string {
+  if (v === null || v === undefined || v === "") return "";
+  return Number(v).toFixed(digits).replace(".", ",");
+}
+
 export function errorMessage(e: unknown): string {
   if (!e) return "Erro desconhecido";
   if (typeof e === "string") return e;
   const m = (e as { message?: string }).message ?? String(e);
   if (m.includes("duplicate key")) {
     if (m.includes("sku")) return "Já existe um produto com este SKU.";
+    if (m.includes("products_code")) return "Já existe um produto com este código.";
     if (m.includes("document")) return "Já existe um cadastro com este CPF/CNPJ.";
     return "Este registro já existe.";
   }
