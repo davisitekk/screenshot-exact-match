@@ -38,3 +38,5 @@ use the editor.
 - Product images are in the private `product-images` bucket; `products.image_url` stores the storage path and the UI uses signed URLs.
 - Routes: public `/auth`, `/reset-password`; everything else under `src/routes/_authenticated/` (client-only gate, app shell with sidebar).
 - The root `.env` (Lovable Cloud publishable URL/key only) stays tracked in git; hosted builds inline `VITE_SUPABASE_*` from it and the app crashes with "Missing Supabase environment variable(s)" without it.
+- Deletion guards live in the database, not only the UI: foreign keys to `products` (stock_movements, order_items) and to `product_categories` (products, subcategories) are ON DELETE RESTRICT, so history is never cascaded away and products never silently lose their category.
+- `products.margin` is a generated column; never include it in insert/update payloads (Postgres rejects the write).

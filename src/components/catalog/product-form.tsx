@@ -87,7 +87,6 @@ export function ProductDialog({ product, categories, onClose }: { product: Produ
     const image_url = uploaded ?? (removeImage ? null : product?.image_url ?? null);
     const c = nums["cost"] ?? 0;
     const p = nums["price"] ?? 0;
-    const m = marginPercent(p, c);
     const payload = {
       name,
       description: text(f.description),
@@ -98,7 +97,7 @@ export function ProductDialog({ product, categories, onClose }: { product: Produ
       supplier_id: f.supplier_id || null,
       cost: c,
       price: p,
-      margin: m === null ? null : Math.round(m * 100) / 100,
+      // margin is a generated column computed by the database from price and cost.
       min_stock: Number(f.min_stock),
       weight_kg: nums["weight_kg"] ?? null,
       height_cm: nums["height_cm"] ?? null,

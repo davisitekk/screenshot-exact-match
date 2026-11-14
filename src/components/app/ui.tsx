@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Children, cloneElement, isValidElement, useId, type ReactElement, type ReactNode } from "react";
 import { Search, ShieldOff, Inbox } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -97,13 +97,18 @@ export function SearchInput({ value, onChange, placeholder = "Pesquisar..." }: {
 }
 
 export function Field({ label, children, hint, className, required }: { label: string; children: ReactNode; hint?: string | undefined; className?: string | undefined; required?: boolean | undefined }) {
+  // Ties the label to a single form control so clicking it focuses the field and screen readers announce it.
+  const autoId = useId();
+  const only = Children.count(children) === 1 && isValidElement(children) ? (children as ReactElement<{ id?: string }>) : null;
+  const controlId = only ? (only.props.id ?? autoId) : undefined;
+  const control = only && !only.props.id ? cloneElement(only, { id: autoId }) : children;
   return (
     <div className={cn("space-y-1.5", className)}>
-      <Label className="text-xs font-medium text-muted-foreground">
+      <Label htmlFor={controlId} className="text-xs font-medium text-muted-foreground">
         {label}
         {required && <span className="text-destructive"> *</span>}
       </Label>
-      {children}
+      {control}
       {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );

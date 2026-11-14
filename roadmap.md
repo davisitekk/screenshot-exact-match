@@ -12,9 +12,9 @@
 - [x] Estrutura inicial de banco, regras de estoque/pedidos/financeiro e permissões por perfil versionadas em migrations.
 - [x] Testes unitários existentes para cálculos financeiros, catálogo, CPF/CNPJ e roteamento.
 - [ ] Validar login, cadastro, recuperação de senha e provisionamento seguro do primeiro administrador.
-- [ ] Telas de Produtos (lista, filtros, cadastro/edição, foto, ativar/inativar, movimentar estoque) e Categorias (árvore, cadastro/edição, ativar/inativar, excluir com bloqueio).
+- [x] Telas de Produtos (lista, filtros, cadastro/edição, ativar/inativar, movimentar estoque, exclusão bloqueada) e Categorias (árvore, cadastro/edição, nome repetido bloqueado, ativar/inativar, excluir com bloqueio) — testadas na tela em 14/11/2026. Envio de foto pelo formulário ainda não testado.
 - [ ] Implementar ou confirmar rotas funcionais para estoque (histórico), pedidos, clientes, fornecedores, financeiro, usuários, atividades e configurações.
-- [ ] Corrigir links do menu que ainda não tenham uma rota implementada (marcar como "Em breve" até existirem).
+- [x] Corrigir links do menu que ainda não tenham uma rota implementada (marcar como "Em breve" até existirem).
 - [ ] Validar dashboard e indicadores contra dados reais e regras contábeis definidas.
 - [ ] Validar operações de pedido, estoque, contas a receber/pagar e reversões com testes de integração.
 - [ ] Confirmar que todos os módulos respeitam os papéis admin, financeiro e vendas no banco, não apenas na interface.
