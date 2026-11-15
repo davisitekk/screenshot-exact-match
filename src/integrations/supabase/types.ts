@@ -1047,6 +1047,8 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      is_valid_cnpj: { Args: { p: string }; Returns: boolean }
+      is_valid_cpf: { Args: { p: string }; Returns: boolean }
       order_confirmed: {
         Args: {
           _pay: Database["public"]["Enums"]["payment_status"]

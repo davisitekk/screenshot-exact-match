@@ -64,6 +64,46 @@ export function onlyDigits(v: string) {
   return v.replace(/\D/g, "");
 }
 
+/** UTC offset of Brasília at a given instant, in minutes (e.g. -180). */
+function tzOffsetMinutes(at: Date): number {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit",
+  }).formatToParts(at);
+  const get = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? 0);
+  const asUTC = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"), get("second"));
+  return Math.round((asUTC - at.getTime()) / 60000);
+}
+
+/** Instant (ISO, UTC) when a yyyy-mm-dd day starts in Brasília — for filtering timestamps by local day. */
+export function zonedDayStart(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number) as [number, number, number];
+  const guess = Date.UTC(y, m - 1, d);
+  return new Date(guess - tzOffsetMinutes(new Date(guess)) * 60000).toISOString();
+}
+
+/** "(11) 91234-5678", "(11) 1234-5678" or "+55 (11) ..."; other lengths are shown as typed. */
+export function formatPhone(value: string | null | undefined) {
+  let d = onlyDigits(value ?? "");
+  if (!d) return "";
+  let prefix = "";
+  if ((d.length === 12 || d.length === 13) && d.startsWith("55")) { prefix = "+55 "; d = d.slice(2); }
+  if (d.length === 11) return `${prefix}(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  if (d.length === 10) return `${prefix}(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return value ?? "";
+}
+
+/** wa.me link for a Brazilian number (adds country code 55 when missing), or null when too short. */
+export function whatsappLink(value: string | null | undefined): string | null {
+  const d = onlyDigits(value ?? "");
+  if (d.length < 10) return null;
+  return `https://wa.me/${d.length <= 11 ? `55${d}` : d}`;
+}
+
+export function formatZip(value: string | null | undefined) {
+  const d = onlyDigits(value ?? "");
+  return d.length === 8 ? `${d.slice(0, 5)}-${d.slice(5)}` : value ?? "";
+}
+
 export function isValidCPF(value: string) {
   const c = onlyDigits(value);
   if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false;

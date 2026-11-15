@@ -96,7 +96,7 @@ export function SearchInput({ value, onChange, placeholder = "Pesquisar..." }: {
   );
 }
 
-export function Field({ label, children, hint, className, required }: { label: string; children: ReactNode; hint?: string | undefined; className?: string | undefined; required?: boolean | undefined }) {
+export function Field({ label, children, hint, error, className, required }: { label: string; children: ReactNode; hint?: string | undefined; error?: string | undefined; className?: string | undefined; required?: boolean | undefined }) {
   // Ties the label to a single form control so clicking it focuses the field and screen readers announce it.
   const autoId = useId();
   const only = Children.count(children) === 1 && isValidElement(children) ? (children as ReactElement<{ id?: string }>) : null;
@@ -109,7 +109,7 @@ export function Field({ label, children, hint, className, required }: { label: s
         {required && <span className="text-destructive"> *</span>}
       </Label>
       {control}
-      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+      {error ? <p className="text-xs text-destructive">{error}</p> : hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }

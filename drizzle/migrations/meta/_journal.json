@@ -43,6 +43,13 @@
       "when": 1794672401089,
       "tag": "0005_block_deleting_categories_with_products",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794706012471,
+      "tag": "0006_customers_validation_and_least_privilege",
+      "breakpoints": true
     }
   ]
 }

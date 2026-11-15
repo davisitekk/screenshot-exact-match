@@ -35,6 +35,7 @@ export function StockDialog({ product, onClose }: { product: Product; onClose: (
       qc.invalidateQueries({ queryKey: productsQuery.queryKey }),
       qc.invalidateQueries({ queryKey: ["dashboard"] }),
       qc.invalidateQueries({ queryKey: ["alerts"] }),
+      qc.invalidateQueries({ queryKey: ["stock_movements"] }),
     ]);
     onClose();
   }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { z } from "zod";
-import { Boxes, MoreVertical, Package, Pencil, Plus, Power, Trash2 } from "lucide-react";
+import { Boxes, History, MoreVertical, Package, Pencil, Plus, Power, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/hooks/use-auth";
@@ -126,6 +126,7 @@ function ProductsPage() {
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={() => setEditing(p)}><Pencil /> Editar</DropdownMenuItem>
           <DropdownMenuItem onSelect={() => setMoving(p)}><Boxes /> Movimentar estoque</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => navigate({ to: "/estoque", search: { produto: p.id } })}><History /> Ver histórico de estoque</DropdownMenuItem>
           <DropdownMenuItem onSelect={() => toggle(p)}><Power /> {p.active ? "Inativar" : "Ativar"}</DropdownMenuItem>
           {isAdmin && (
             <>
