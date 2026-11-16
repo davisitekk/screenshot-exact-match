@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decimalInput, parseDecimal } from "./format";
+import { decimalInput, parseDecimal, zonedDayStart } from "./format";
 
 describe("leitura de valores digitados", () => {
   it("entende vírgula como separador decimal", () => {
@@ -19,5 +19,12 @@ describe("leitura de valores digitados", () => {
   it("mostra o valor salvo com vírgula para edição", () => {
     expect(decimalInput(1234.5)).toBe("1234,50");
     expect(decimalInput(null)).toBe("");
+  });
+});
+
+describe("dias no horário de Brasília", () => {
+  it("o dia começa às 03:00 UTC (UTC-3)", () => {
+    expect(zonedDayStart("2026-11-16")).toBe("2026-11-16T03:00:00.000Z");
+    expect(zonedDayStart("2026-01-01")).toBe("2026-01-01T03:00:00.000Z");
   });
 });

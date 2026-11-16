@@ -13,7 +13,8 @@
 - [x] Testes unitários existentes para cálculos financeiros, catálogo, CPF/CNPJ e roteamento.
 - [ ] Validar login, cadastro, recuperação de senha e provisionamento seguro do primeiro administrador.
 - [x] Telas de Produtos (lista, filtros, cadastro/edição, ativar/inativar, movimentar estoque, exclusão bloqueada) e Categorias (árvore, cadastro/edição, nome repetido bloqueado, ativar/inativar, excluir com bloqueio) — testadas na tela em 14/11/2026. Envio de foto pelo formulário ainda não testado.
-- [ ] Implementar ou confirmar rotas funcionais para estoque (histórico), pedidos, clientes, fornecedores, financeiro, usuários, atividades e configurações.
+- [x] Estoque (histórico com filtros por produto, tipo e período, 50 por página) e Clientes (busca, cadastro/edição, CPF/CNPJ validado no banco, CPF repetido bloqueado, aviso de possível duplicidade, exclusão só sem pedidos/contas) — testados na tela em 16/11/2026. Troca de página não testada (há menos de 50 movimentações).
+- [ ] Implementar rotas funcionais para pedidos, fornecedores, financeiro, usuários, atividades e configurações.
 - [x] Corrigir links do menu que ainda não tenham uma rota implementada (marcar como "Em breve" até existirem).
 - [ ] Validar dashboard e indicadores contra dados reais e regras contábeis definidas.
 - [ ] Validar operações de pedido, estoque, contas a receber/pagar e reversões com testes de integração.
